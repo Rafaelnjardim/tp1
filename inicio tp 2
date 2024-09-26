@@ -1,0 +1,22 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+typedef struct types
+{
+    int info;
+    struct types* prox;
+
+
+}types;
+
+typedef struct Pokemon
+{
+    int id;
+    int generation;
+    char name [20];
+    char description [50];
+} Pokemon;
+
+int main(){
+
+}
