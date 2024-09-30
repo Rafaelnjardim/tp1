@@ -1,0 +1,156 @@
+import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
+class Lista {
+    String atributos;
+    Lista next;
+    Lista(String atributos) {
+        this.atributos = atributos;
+        this.next = null;
+    }
+}
+
+class Pokemon {
+    public int id;
+    public String name;
+    public Lista type;
+    public Lista abilities;
+    public Pokemon next;
+
+    Pokemon() {
+    }
+
+    Pokemon(int id, String name, Lista type, Lista abilities) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.abilities = abilities;
+    }
+
+    public void inserirPokemon(Pokemon novoPokemon) {
+        if (this.next == null) {
+            this.next = novoPokemon;
+        } else {
+            Pokemon current = this.next;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = novoPokemon;
+        }
+    }
+
+    public void pesquisarList(int id) {
+        Pokemon current = this;
+        while (current != null) {
+            if (current.id == id) {
+                current.imprimir();
+                return;
+            }
+            current = current.next;
+        }
+        System.out.println("Pokémon não encontrado com o ID: " + id);
+    }
+
+    public void imprimir() {
+        String typeList = exibirLista(this.type);
+        String abilitiesList = exibirLista(this.abilities);
+        System.out.println(String.format("[#%d -> %s: Tipos: %s - Habilidades: %s]", this.id, this.name, typeList, abilitiesList));
+    }
+
+    private String exibirLista(Lista lista) {
+        StringBuilder result = new StringBuilder("[");
+        Lista current = lista;
+        while (current != null) {
+            result.append(current.atributos);
+            if (current.next != null) {
+                result.append(", ");
+            }
+            current = current.next;
+        }
+        result.append("]");
+        return result.toString();
+    }
+
+    public Pokemon readCSV(String nameCSV) {
+        BufferedReader br = null;
+        Pokemon list = new Pokemon();
+
+        try {
+            // Forçando a leitura como UTF-8
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(nameCSV), "UTF-8"));
+            String line;
+            br.readLine();  // Ignora o cabeçalho do CSV
+
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+
+                if (parts.length < 4) {
+                    System.out.println("Linha com dados incompletos: " + line);
+                    continue;
+                }
+
+                int ID = Integer.parseInt(parts[0].trim());
+                String nome = parts[2].trim();
+
+                Lista Type1 = new Lista(parts[4].replaceAll("[\\[\\]']", "").trim());
+                Lista Type2 = parts[5].isEmpty() ? null : new Lista(parts[5].replaceAll("[\\[\\]']", "").trim());
+
+                if (Type2 != null) {
+                    Type1.next = Type2;
+                }
+
+                Lista Type = Type1;
+
+                Lista skills = new Lista(parts[6].replaceAll("[\\[\\]']", "").trim());
+
+                Pokemon p = new Pokemon(ID, nome, Type, skills);
+                list.inserirPokemon(p);
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo CSV: " + e.getMessage());
+        } finally {
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException e) {
+                System.out.println("Erro ao fechar o arquivo: " + e.getMessage());
+            }
+        }
+        return list;
+    }
+}
+
+public class App {
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String line;
+        Pokemon pokemons = new Pokemon();
+
+        // Atualize o caminho do arquivo para o seu caso
+        String arquivo = "C:\\Users\\Usuário\\Downloads\\video\\pokemon.csv";
+
+        // Carrega os dados do CSV uma vez
+        pokemons = pokemons.readCSV(arquivo);
+
+        // Leitura do input do usuário para buscar o ID
+        do {
+
+            line = br.readLine();
+
+            if (line.equalsIgnoreCase("FIM")) {
+                break;
+            }
+
+            try {
+                int n = Integer.parseInt(line);  // Converte a entrada para número
+                pokemons.pesquisarList(n);       // Pesquisa o Pokémon com base no ID
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida. Por favor, insira um número.");
+            }
+
+        } while (true);
+    }
+}
