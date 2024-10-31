@@ -155,7 +155,7 @@ class Lista {
 	}
 
 
-	public void inserirInicio(int x) {
+	public void inserirInicio(Pokemon pokemon) {
 		Celula tmp = new Celula(x);
       tmp.prox = primeiro.prox;
 		primeiro.prox = tmp;
@@ -418,7 +418,6 @@ class Lista {
         long fim = System.currentTimeMillis();
         long tempoExecucao = fim - inicio;
 
-        // Para cada Pokémon já ordenado, imprimir apenas se o ID estiver na lista de IDs de entrada
         for (Pokemon p : pokemons) {
             if (idsEntrada.contains(p.getId())) {
                 p.imprimir();
