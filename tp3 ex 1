@@ -1,0 +1,437 @@
+import java.io.*;
+import java.text.*;
+import java.util.*;
+
+public class Pokemon {
+
+    private int id;
+    private int generation;
+    private String name;
+    private String description;
+    private List<String> types;
+    private List<String> abilities;
+    private double weight;
+    private double height;
+    private int captureRate;
+    private boolean isLegendary;
+    private Date captureDate;
+
+    public Pokemon(int id, int generation, String name, String description, List<String> types, List<String> abilities,
+            double weight, double height, int captureRate, boolean isLegendary, Date captureDate) {
+        this.id = id;
+        this.generation = generation;
+        this.name = name;
+        this.description = description;
+        this.types = types;
+        this.abilities = abilities;
+        this.weight = weight;
+        this.height = height;
+        this.captureRate = captureRate;
+        this.isLegendary = isLegendary;
+        this.captureDate = captureDate;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getGeneration() {
+        return generation;
+    }
+
+    public void setGeneration(int generation) {
+        this.generation = generation;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<String> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<String> types) {
+        this.types = types;
+    }
+
+    public List<String> getAbilities() {
+        return abilities;
+    }
+
+    public void setAbilities(List<String> abilities) {
+        this.abilities = abilities;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public int getCaptureRate() {
+        return captureRate;
+    }
+
+    public void setCaptureRate(int captureRate) {
+        this.captureRate = captureRate;
+    }
+
+    public boolean isLegendary() {
+        return isLegendary;
+    }
+
+    public void setLegendary(boolean isLegendary) {
+        this.isLegendary = isLegendary;
+    }
+
+    public Date getCaptureDate() {
+        return captureDate;
+    }
+
+    public void setCaptureDate(Date captureDate) {
+        this.captureDate = captureDate;
+    }
+    class Celula {
+        public int elemento; // Elemento inserido na celula.
+        public Celula prox; // Aponta a celula prox.
+
+        public Celula() {
+            this(0);
+        }
+        public Celula(int elemento) {
+          this.elemento = elemento;
+          this.prox = null;
+        }
+    }
+    class Celula {
+        public int elemento; // Elemento inserido na celula.
+        public Celula prox; // Aponta a celula prox.
+
+        public Celula() {
+            this(0);
+        }
+
+        public Celula(int elemento) {
+          this.elemento = elemento;
+          this.prox = null;
+        }
+    }
+
+class Lista {
+	private Celula primeiro;
+	private Celula ultimo;
+
+
+	public Lista() {
+		primeiro = new Celula();
+		ultimo = primeiro;
+	}
+
+
+	public void inserirInicio(int x) {
+		Celula tmp = new Celula(x);
+      tmp.prox = primeiro.prox;
+		primeiro.prox = tmp;
+		if (primeiro == ultimo) {                 
+			ultimo = tmp;
+		}
+      tmp = null;
+	}
+
+
+	public void inserirFim(int x) {
+		ultimo.prox = new Celula(x);
+		ultimo = ultimo.prox;
+	}
+
+	public int removerInicio() throws Exception {
+		if (primeiro == ultimo) {
+			throw new Exception("Erro ao remover (vazia)!");
+		}
+
+      Celula tmp = primeiro;
+		primeiro = primeiro.prox;
+		int resp = primeiro.elemento;
+      tmp.prox = null;
+      tmp = null;
+		return resp;
+	}
+
+
+	public int removerFim() throws Exception {
+		if (primeiro == ultimo) {
+			throw new Exception("Erro ao remover (vazia)!");
+		} 
+
+		// Caminhar ate a penultima celula:
+      Celula i;
+      for(i = primeiro; i.prox != ultimo; i = i.prox);
+
+      int resp = ultimo.elemento; 
+      ultimo = i; 
+      i = ultimo.prox = null;
+      
+		return resp;
+	}
+
+
+   public void inserir(int x, int pos) throws Exception {
+
+      int tamanho = tamanho();
+
+      if(pos < 0 || pos > tamanho){
+			throw new Exception("Erro ao inserir posicao (" + pos + " / tamanho = " + tamanho + ") invalida!");
+      } else if (pos == 0){
+         inserirInicio(x);
+      } else if (pos == tamanho){
+         inserirFim(x);
+      } else {
+		   // Caminhar ate a posicao anterior a insercao
+         Celula i = primeiro;
+         for(int j = 0; j < pos; j++, i = i.prox);
+		
+         Celula tmp = new Celula(x);
+         tmp.prox = i.prox;
+         i.prox = tmp;
+         tmp = i = null;
+      }
+   }
+
+
+	public int remover(int pos) throws Exception {
+      int resp;
+      int tamanho = tamanho();
+
+		if (primeiro == ultimo){
+			throw new Exception("Erro ao remover (vazia)!");
+
+      } else if(pos < 0 || pos >= tamanho){
+			throw new Exception("Erro ao remover (posicao " + pos + " / " + tamanho + " invalida!");
+      } else if (pos == 0){
+         resp = removerInicio();
+      } else if (pos == tamanho - 1){
+         resp = removerFim();
+      } else {
+		   // Caminhar ate a posicao anterior a insercao
+         Celula i = primeiro;
+         for(int j = 0; j < pos; j++, i = i.prox);
+		
+         Celula tmp = i.prox;
+         resp = tmp.elemento;
+         i.prox = tmp.prox;
+         tmp.prox = null;
+         i = tmp = null;
+      }
+
+		return resp;
+	}
+
+	public void mostrar() {
+		System.out.print("[ ");
+		for (Celula i = primeiro.prox; i != null; i = i.prox) {
+			System.out.print(i.elemento + " ");
+		}
+		System.out.println("] ");
+	}
+
+	public boolean pesquisar(int x) {
+		boolean resp = false;
+		for (Celula i = primeiro.prox; i != null; i = i.prox) {
+         if(i.elemento == x){
+            resp = true;
+            i = ultimo;
+         }
+		}
+		return resp;
+	}
+
+   public int tamanho() {
+      int tamanho = 0; 
+      for(Celula i = primeiro; i != ultimo; i = i.prox, tamanho++);
+      return tamanho;
+   }
+}
+    // Função auxiliar para remover aspas desnecessárias e formatar as listas
+    private String formatList(List<String> list) {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < list.size(); i++) {
+            // Remover qualquer aspas dupla ou simples e espaços antes de formatar
+            sb.append("'").append(list.get(i).replaceAll("\"", "").replaceAll("'", "").trim()).append("'");
+            if (i < list.size() - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    // Método imprimir
+    public void imprimir() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String formattedTypes = formatList(types);
+        String formattedAbilities = formatList(abilities);
+
+        System.out.print("[#" + id + " -> " + name + ": ");
+        System.out.print(description + " - " + formattedTypes + " - " + formattedAbilities);
+        System.out.print(" - " + weight + "kg - " + height + "m - " + captureRate + "% - ");
+        System.out.print(isLegendary + " - " + generation + " gen] - " + sdf.format(captureDate) + "\n");
+    }
+
+    // Método para criar um Pokémon a partir de uma linha do CSV
+    public static Pokemon fromCsv(String[] data) {
+        int id = Integer.parseInt(data[0].trim());
+        int generation = Integer.parseInt(data[1].trim());
+        String name = data[2].trim();
+        String description = data[3].trim();
+
+        // Lidar com os tipos
+        List<String> types = new ArrayList<>();
+        types.add(data[4].trim());
+        if (!data[5].trim().isEmpty()) {
+            types.add(data[5].trim());
+        }
+
+        // Lidar com as habilidades removendo qualquer aspas extra
+        List<String> abilities = new ArrayList<>();
+        String abilitiesStr = data[6].replace("[", "").replace("]", "").trim();
+        for (String ability : abilitiesStr.split(",")) {
+            abilities.add(ability.trim().replaceAll("\"", "").replaceAll("'", ""));
+        }
+
+        // Lidar com os números e data
+        double weight = data[7].trim().isEmpty() ? 0.0 : Double.parseDouble(data[7].trim());
+        double height = data[8].trim().isEmpty() ? 0.0 : Double.parseDouble(data[8].trim());
+        int captureRate = data[9].trim().isEmpty() ? 0 : Integer.parseInt(data[9].trim());
+        boolean isLegendary = Integer.parseInt(data[10].trim()) == 1;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date captureDate = null;
+        try {
+            captureDate = sdf.parse(data[11].trim());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return new Pokemon(id, generation, name, description, types, abilities, weight, height, captureRate,
+                isLegendary, captureDate);
+    }
+
+    // Função para ler o CSV
+    public static List<Pokemon> lerCsv(String filePath) {
+        List<Pokemon> pokemons = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(new FileInputStream(filePath), "ISO-8859-1"))) {
+            String line;
+            br.readLine(); // Ignora o cabeçalho
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                Pokemon pokemon = Pokemon.fromCsv(data);
+                pokemons.add(pokemon);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return pokemons;
+    }
+    public static void ordenarPorNome(List<Pokemon> pokemons) {
+        int n = pokemons.size();
+        int comparacoes = 0; // Contador de comparações
+        int movimentacoes = 0; // Contador de movimentações
+
+        for (int i = 0; i < n - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < n; j++) {
+                comparacoes++; // Incrementa o número de comparações
+                if (pokemons.get(j).getName().compareTo(pokemons.get(minIndex).getName()) < 0) {
+                    minIndex = j;
+                }
+            }
+            // Troca os elementos e conta a movimentação
+            if (minIndex != i) {
+                Pokemon temp = pokemons.get(minIndex);
+                pokemons.set(minIndex, pokemons.get(i));
+                pokemons.set(i, temp);
+                movimentacoes += 3; // Cada troca envolve 3 movimentações
+            }
+        }
+
+        // Depois da ordenação, cria o arquivo de log
+        criarLog(comparacoes, movimentacoes);
+    }
+
+    // Função para criar o log
+    public static void criarLog(int comparacoes, int movimentacoes) {
+        String matricula = "848227"; 
+        long tempoExecucao = System.currentTimeMillis(); // Captura o tempo atual para o log
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("matrícula_selecao.txt"))) {
+            writer.write(matricula + "\t" + comparacoes + "\t" + movimentacoes + "\t" + tempoExecucao + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Pokemon> pokemons = Pokemon.lerCsv("d:\\users\\1515591\\Downloads\\pok\\pokemon.csv");
+
+        // Leitura dos IDs de entrada
+        List<Integer> idsEntrada = new ArrayList<>();
+        while (scanner.hasNext()) {
+            String input = scanner.next();
+            if (input.equals("FIM")) {
+                break;
+            }
+            idsEntrada.add(Integer.parseInt(input));
+        }
+
+        // Medir o tempo de execução do algoritmo de ordenação
+        long inicio = System.currentTimeMillis();
+        ordenarPorNome(pokemons);
+        long fim = System.currentTimeMillis();
+        long tempoExecucao = fim - inicio;
+
+        // Para cada Pokémon já ordenado, imprimir apenas se o ID estiver na lista de IDs de entrada
+        for (Pokemon p : pokemons) {
+            if (idsEntrada.contains(p.getId())) {
+                p.imprimir();
+            }
+        }
+
+        // Registra o tempo de execução no log
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("matrícula_selecao.txt", true))) {
+            writer.write("Tempo de execução: " + tempoExecucao + " ms\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        scanner.close();
+    }
+}
